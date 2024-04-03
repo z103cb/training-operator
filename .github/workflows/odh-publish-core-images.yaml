@@ -1,0 +1,31 @@
+# This is a copy of the publish-core-images.yaml and has been customized to
+# use the quay login credentials.
+# The unused parts of the original have been commented out on purpose.
+name: ODH -- Publish Training Operator Core Images
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  core:
+    name: ODH - Publish Image
+    uses: ./.github/workflows/odh-build-and-publish-images.yaml
+    with:
+      component-name: ${{ matrix.component-name }}
+      platforms: ${{ matrix.platforms }}
+      dockerfile: ${{ matrix.dockerfile }}
+      context: ${{ matrix.context }}
+      quay-repo-name: ${{vars.QUAY_REPO_NAME}}
+    secrets:
+      QUAY_USERNAME: ${{ secrets.QUAY_USERNAME }}
+      QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - component-name: training-operator
+            dockerfile: build/images/training-operator/Dockerfile.buildx
+            platforms: linux/amd64,linux/arm64,
+            context: .

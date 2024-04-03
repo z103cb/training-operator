@@ -59,10 +59,7 @@ runs:
     - name: Build and Push
       uses: docker/build-push-action@v3
       with:
-        platforms: ${{ inputs.platforms }}
-        context: ${{ inputs.context }}
-        file: ${{ inputs.dockerfile }}
-        push: ${{ inputs.push }}
+        image: ${{ inputs.image }}
         tags: ${{ steps.meta.outputs.tags }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
